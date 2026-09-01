@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Welcome</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #fff1f8,
+                #f3e8ff,
+                #e8f4ff
+            );
+        }
+
+        .welcome-card {
+            width: 600px;
+            max-width: 90%;
+
+            padding: 60px 40px;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.92);
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.15);
+
+            animation: appear 1s ease;
+        }
+
+        .logo {
+            font-size: 52px;
+            font-weight: bold;
+
+            color: #7b2cbf;
+
+            margin-bottom: 15px;
+
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        .welcome {
+            font-size: 30px;
+            font-weight: bold;
+
+            color: #333;
+
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            line-height: 1.6;
+
+            color: #666;
+
+            margin-bottom: 35px;
+        }
+
+        .shopping-button {
+            display: inline-block;
+
+            padding: 15px 38px;
+
+            background: linear-gradient(
+                135deg,
+                #7b2cbf,
+                #9d4edd
+            );
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 30px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            box-shadow:
+                0 8px 20px rgba(123, 44, 191, 0.25);
+
+            transition: 0.3s;
+        }
+
+        .shopping-button:hover {
+            transform: scale(1.08);
+
+            box-shadow:
+                0 12px 25px rgba(123, 44, 191, 0.4);
+        }
+
+        .features {
+            margin-top: 40px;
+
+            display: flex;
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            padding: 12px 18px;
+
+            background: #faf5ff;
+
+            border-radius: 15px;
+
+            color: #555;
+
+            font-size: 15px;
+
+            transition: 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        @keyframes float {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="welcome-card">
+
+        <div class="logo">
+            AyishaMart
+        </div>
+
+        <div class="welcome">
+            Welcome! 🎉
+        </div>
+
+        <div class="subtitle">
+            Your account has been created successfully.
+            <br>
+            Discover beautiful handmade products made with love.
+        </div>
+
+        <a href="products.html" class="shopping-button">
+            🛍️ Start Shopping
+        </a>
+
+        <div class="features">
+
+            <div class="feature">
+                ✨ Beautiful Products
+            </div>
+
+            <div class="feature">
+                💝 Quality Products
+            </div>
+
+            <div class="feature">
+                🌸 Best Choice
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

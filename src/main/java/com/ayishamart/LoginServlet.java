@@ -34,9 +34,14 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                response.getWriter().println("Login successful!");
+
+                // Login successful
+                response.sendRedirect("welcome.html");
+
             } else {
+
                 response.getWriter().println("Invalid username or password!");
+
             }
 
             rs.close();
@@ -44,8 +49,10 @@ public class LoginServlet extends HttpServlet {
             con.close();
 
         } catch (Exception e) {
+
             e.printStackTrace();
             response.getWriter().println("Login failed!");
+
         }
     }
 }

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Products</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f3fb;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a1b9a, #9c4dcc);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        header h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 17px;
+        }
+
+        .search-box {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .search-box input {
+            width: 500px;
+            max-width: 90%;
+
+            padding: 14px 20px;
+
+            border: 1px solid #ddd;
+            border-radius: 30px;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #8e44ad;
+            box-shadow: 0 0 8px rgba(142, 68, 173, 0.2);
+        }
+
+        .products {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(210px, 1fr));
+
+            gap: 25px;
+
+            padding: 20px 50px 50px;
+        }
+
+        .product {
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+            text-align: center;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.10);
+
+            transition: 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product img {
+            width: 100%;
+            height: 180px;
+
+            object-fit: cover;
+
+            border-radius: 12px;
+
+            margin-bottom: 15px;
+        }
+
+        .product h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .product p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #6a1b9a;
+
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            border: none;
+
+            padding: 10px 22px;
+
+            background: #8e44ad;
+
+            color: white;
+
+            border-radius: 25px;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .buy-btn:hover {
+            background: #6a1b9a;
+
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>AyishaMart</h1>
+
+        <p>Beautiful Handmade Products</p>
+
+    </header>
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            placeholder="Search products..."
+        >
+
+    </div>
+
+
+    <div class="products">
+
+
+        <!-- Product 1 -->
+
+        <div class="product">
+
+            <img
+                src="images/candle.jpg"
+                alt="Handmade Candle"
+            >
+
+            <h2>Candle</h2>
+
+            <p>Beautiful handmade candle</p>
+
+            <div class="price">₹199</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 2 -->
+
+        <div class="product">
+
+            <img
+                src="images/crochet-flower.jpg"
+                alt="Crochet Flower"
+            >
+
+            <h2>Crochet Flower</h2>
+
+            <p>Handmade crochet flower</p>
+
+            <div class="price">₹249</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 3 -->
+
+        <div class="product">
+
+            <img
+                src="images/cute-notebook.jpg"
+                alt="Cute Notebook"
+            >
+
+            <h2>Cute Notebook</h2>
+
+            <p>Beautiful handmade notebook</p>
+
+            <div class="price">₹149</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 4 -->
+
+        <div class="product">
+
+            <img
+                src="images/gift-box.jpg"
+                alt="Gift Box"
+            >
+
+            <h2>Gift Box</h2>
+
+            <p>Beautiful handmade gift box</p>
+
+            <div class="price">₹399</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 5 -->
+
+        <div class="product">
+
+            <img
+                src="images/handmade-bracelet.jpg"
+                alt="Handmade Bracelet"
+            >
+
+            <h2>Handmade Bracelet</h2>
+
+            <p>Beautiful handmade bracelet</p>
+
+            <div class="price">₹299</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 6 -->
+
+        <div class="product">
+
+            <img
+                src="images/mini-plant-pot.jpg"
+                alt="Mini Plant Pot"
+            >
+
+            <h2>Mini Plant Pot</h2>
+
+            <p>Small handmade plant pot</p>
+
+            <div class="price">₹349</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 7 -->
+
+        <div class="product">
+
+            <img
+                src="images/photo-frame.jpg"
+                alt="Photo Frame"
+            >
+
+            <h2>Photo Frame</h2>
+
+            <p>Beautiful handmade photo frame</p>
+
+            <div class="price">₹299</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 8 -->
+
+        <div class="product">
+
+            <img
+                src="images/resin-keychain.jpg"
+                alt="Resin Keychain"
+            >
+
+            <h2>Resin Keychain</h2>
+
+            <p>Colorful handmade keychain</p>
+
+            <div class="price">₹149</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 9 -->
+
+        <div class="product">
+
+            <img
+                src="images/scrunchies.jpg"
+                alt="Scrunchies"
+            >
+
+            <h2>Scrunchies</h2>
+
+            <p>Beautiful handmade scrunchies</p>
+
+            <div class="price">₹99</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- Product 10 -->
+
+        <div class="product">
+
+            <img
+                src="images/wall-hanging.jpg"
+                alt="Wall Hanging"
+            >
+
+            <h2>Wall Hanging</h2>
+
+            <p>Beautiful handmade wall decor</p>
+
+            <div class="price">₹399</div>
+
+            <button class="buy-btn">
+                Add to Cart
+            </button>
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>
