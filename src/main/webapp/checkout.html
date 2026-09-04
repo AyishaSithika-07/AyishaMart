@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Checkout</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #fff1f8,
+                #f3e8ff,
+                #e8f4ff
+            );
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #7b2cbf;
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .box h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item span:first-child {
+            color: #555;
+        }
+
+        .order-item span:last-child {
+            font-weight: bold;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 2px solid #eee;
+            font-size: 22px;
+            font-weight: bold;
+            color: #7b2cbf;
+        }
+
+        .payment-option {
+            display: block;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .payment-option:hover {
+            background: #faf5ff;
+        }
+
+        .payment-option input {
+            margin-right: 10px;
+        }
+
+        .place-order {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 30px;
+            background: #f4c430;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .place-order:hover {
+            transform: scale(1.02);
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #7b2cbf;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>Checkout</h1>
+            <p>Complete your order</p>
+        </div>
+
+        <div class="box">
+
+            <h2>🛍️ Order Summary</h2>
+
+            <div id="orderSummary"></div>
+
+            <div class="total">
+                <span>Total:</span>
+                <span id="checkoutTotal">₹0</span>
+            </div>
+
+        </div>
+
+        <div class="box">
+
+            <h2>💳 Payment Method</h2>
+
+            <label class="payment-option">
+                <input type="radio" name="payment" value="Cash on Delivery" checked>
+                Cash on Delivery
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment" value="UPI">
+                UPI
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment" value="Card">
+                Card
+            </label>
+
+            <button class="place-order" onclick="placeOrder()">
+                Place Order
+            </button>
+
+            <a href="cart.html" class="back-button">
+                ← Back to Cart
+            </a>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        function displayOrder() {
+
+            const summary = document.getElementById("orderSummary");
+            const totalElement = document.getElementById("checkoutTotal");
+
+            summary.innerHTML = "";
+
+            let total = 0;
+
+            cart.forEach(item => {
+
+                const itemTotal = item.price * item.quantity;
+
+                total += itemTotal;
+
+                const div = document.createElement("div");
+
+                div.className = "order-item";
+
+                div.innerHTML = `
+                    <span>
+                        ${item.name} × ${item.quantity}
+                    </span>
+
+                    <span>
+                        ₹${itemTotal}
+                    </span>
+                `;
+
+                summary.appendChild(div);
+            });
+
+            totalElement.textContent = "₹" + total;
+        }
+
+        function placeOrder() {
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                window.location.href = "products.html";
+                return;
+            }
+
+            const selectedPayment =
+                document.querySelector(
+                    'input[name="payment"]:checked'
+                ).value;
+
+            localStorage.setItem(
+                "paymentMethod",
+                selectedPayment
+            );
+
+            window.location.href = "order-success.html";
+        }
+
+        displayOrder();
+
+    </script>
+
+</body>
+</html>

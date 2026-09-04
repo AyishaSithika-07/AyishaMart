@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Cart</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #fff1f8,
+                #f3e8ff,
+                #e8f4ff
+            );
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #7b2cbf;
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .cart-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info h3 {
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .item-info p {
+            color: #777;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quantity button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #7b2cbf;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .quantity span {
+            font-weight: bold;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #7b2cbf;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-button {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            background: #f4c430;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .checkout-button:hover {
+            transform: scale(1.02);
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>🛒 Your Shopping Cart</h1>
+            <p>Review your selected products</p>
+        </div>
+
+        <div class="cart-box">
+
+            <div id="cartItems"></div>
+
+            <div class="total">
+                <span>Total:</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+
+            <button class="checkout-button" onclick="goToCheckout()">
+                Proceed to Checkout
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        function displayCart() {
+
+            const cartItems = document.getElementById("cartItems");
+            const cartTotal = document.getElementById("cartTotal");
+
+            cartItems.innerHTML = "";
+
+            if (cart.length === 0) {
+
+                cartItems.innerHTML =
+                    '<div class="empty">Your cart is empty.</div>';
+
+                cartTotal.textContent = "₹0";
+                return;
+            }
+
+            let total = 0;
+
+            cart.forEach((item, index) => {
+
+                total += item.price * item.quantity;
+
+                const itemDiv = document.createElement("div");
+
+                itemDiv.className = "cart-item";
+
+                itemDiv.innerHTML = `
+                    <div class="item-info">
+                        <h3>${item.name}</h3>
+                        <p>₹${item.price}</p>
+                    </div>
+
+                    <div class="quantity">
+                        <button onclick="decreaseQuantity(${index})">−</button>
+
+                        <span>${item.quantity}</span>
+
+                        <button onclick="increaseQuantity(${index})">+</button>
+                    </div>
+
+                    <div class="item-price">
+                        ₹${item.price * item.quantity}
+                    </div>
+                `;
+
+                cartItems.appendChild(itemDiv);
+            });
+
+            cartTotal.textContent = "₹" + total;
+        }
+
+        function increaseQuantity(index) {
+
+            cart[index].quantity++;
+
+            saveCart();
+        }
+
+        function decreaseQuantity(index) {
+
+            if (cart[index].quantity > 1) {
+                cart[index].quantity--;
+            } else {
+                cart.splice(index, 1);
+            }
+
+            saveCart();
+        }
+
+        function saveCart() {
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            displayCart();
+        }
+
+        function goToCheckout() {
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            window.location.href = "checkout.html";
+        }
+
+        displayCart();
+    </script>
+
+</body>
+</html>

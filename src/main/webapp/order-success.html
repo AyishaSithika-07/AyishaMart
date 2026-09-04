@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Order Successful</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #fff1f8,
+                #f3e8ff,
+                #e8f4ff
+            );
+
+            padding: 20px;
+        }
+
+        .success-card {
+            width: 600px;
+            max-width: 100%;
+
+            background: white;
+
+            padding: 50px 40px;
+
+            text-align: center;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.15);
+
+            animation: appear 0.8s ease;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #4caf91;
+
+            color: white;
+
+            border-radius: 50%;
+
+            font-size: 45px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            color: #666;
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .order-info {
+            background: #faf5ff;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            margin-bottom: 25px;
+
+            color: #555;
+        }
+
+        .order-info p {
+            margin: 8px 0;
+        }
+
+        .order-info strong {
+            color: #7b2cbf;
+        }
+
+        .continue-button {
+            display: inline-block;
+
+            padding: 15px 35px;
+
+            background: #7b2cbf;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 30px;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .continue-button:hover {
+            transform: scale(1.05);
+
+            box-shadow:
+                0 8px 20px rgba(123, 44, 191, 0.35);
+        }
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>
+            Order Placed Successfully!
+        </h1>
+
+        <div class="message">
+            Thank you for shopping with AyishaMart! 🎉
+            <br>
+            Your order has been received successfully.
+        </div>
+
+        <div class="order-info">
+
+            <p>
+                <strong>Order ID:</strong>
+                <span id="orderId"></span>
+            </p>
+
+            <p>
+                <strong>Payment Method:</strong>
+                <span id="paymentMethod"></span>
+            </p>
+
+            <p>
+                Your order is being processed.
+            </p>
+
+        </div>
+
+        <a href="products.html" class="continue-button">
+            Continue Shopping 🛍️
+        </a>
+
+    </div>
+
+    <script>
+
+        const orderId =
+            "AYM" + Math.floor(100000 + Math.random() * 900000);
+
+        const paymentMethod =
+            localStorage.getItem("paymentMethod")
+            || "Cash on Delivery";
+
+        document.getElementById("orderId").textContent =
+            orderId;
+
+        document.getElementById("paymentMethod").textContent =
+            paymentMethod;
+
+        // Clear cart after successful order
+        localStorage.removeItem("cart");
+
+    </script>
+
+</body>
+</html>
