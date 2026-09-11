@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,626 +7,443 @@
     <title>AyishaMart - Products</title>
 
     <style>
-
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            background: #f7f3fb;
-            color: #333;
+            background: #f7f2ff;
         }
 
         header {
-            background: linear-gradient(135deg, #6a1b9a, #9c4dcc);
+            background: #6a1b9a;
             color: white;
-            text-align: center;
-            padding: 25px 20px;
-            position: relative;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
-            font-size: 38px;
-            margin-bottom: 8px;
+            margin: 0;
         }
 
-        header p {
-            font-size: 17px;
-        }
-
-        .cart-button {
-            position: absolute;
-            right: 25px;
-            top: 25px;
-
-            padding: 10px 18px;
-
+        .cart-btn {
             background: white;
             color: #6a1b9a;
-
             border: none;
-            border-radius: 25px;
-
+            padding: 10px 16px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-
-            text-decoration: none;
-        }
-
-        .cart-button:hover {
-            transform: scale(1.05);
         }
 
         .search-box {
             text-align: center;
-            padding: 30px 20px;
+            padding: 25px;
         }
 
         .search-box input {
-            width: 500px;
-            max-width: 90%;
-
-            padding: 14px 20px;
-
-            border: 1px solid #ddd;
-            border-radius: 30px;
-
+            width: 80%;
+            max-width: 500px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
             font-size: 16px;
-
-            outline: none;
         }
 
-        .search-box input:focus {
-            border-color: #8e44ad;
-            box-shadow: 0 0 8px rgba(142, 68, 173, 0.2);
+        .products-container {
+            padding: 20px 30px 40px;
         }
 
-        .products {
+        #productList {
             display: grid;
-
-            grid-template-columns:
-                repeat(auto-fit, minmax(210px, 1fr));
-
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
-
-            padding: 20px 50px 50px;
         }
 
         .product {
             background: white;
-
-            border-radius: 15px;
-
             padding: 15px;
-
-            text-align: center;
-
-            box-shadow:
-                0 5px 18px rgba(0, 0, 0, 0.10);
-
-            transition: 0.3s;
-        }
-
-        .product:hover {
-            transform: translateY(-6px);
-
-            box-shadow:
-                0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
         }
 
         .product img {
             width: 100%;
-            height: 180px;
-
+            height: 220px;
             object-fit: cover;
-
-            border-radius: 12px;
-
-            margin-bottom: 15px;
+            border-radius: 10px;
         }
 
         .product h2 {
+            color: #6a1b9a;
             font-size: 20px;
             margin-bottom: 8px;
         }
 
         .product p {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 10px;
+            color: #555;
+            min-height: 40px;
         }
 
         .price {
-            font-size: 19px;
-
+            font-size: 20px;
             font-weight: bold;
-
-            color: #6a1b9a;
-
-            margin-bottom: 15px;
+            color: #333;
+            margin: 12px 0;
         }
 
         .buy-btn {
+            width: 100%;
+            padding: 11px;
             border: none;
-
-            padding: 10px 22px;
-
-            background: #8e44ad;
-
+            background: #6a1b9a;
             color: white;
-
-            border-radius: 25px;
-
-            font-size: 14px;
-
+            border-radius: 7px;
             cursor: pointer;
-
-            transition: 0.3s;
+            font-size: 15px;
         }
 
         .buy-btn:hover {
-            background: #6a1b9a;
-
-            transform: scale(1.05);
+            background: #4a126d;
         }
-
-        .added {
-            background: #4caf91 !important;
-        }
-
-        @media (max-width: 600px) {
-
-            header h1 {
-                font-size: 30px;
-            }
-
-            .cart-button {
-                position: static;
-                display: inline-block;
-                margin-top: 15px;
-            }
-
-            .products {
-                padding: 20px;
-            }
-
-        }
-
     </style>
 </head>
 
 <body>
 
-    <header>
+<header>
+    <h1>AyishaMart</h1>
 
-        <h1>AyishaMart</h1>
+    <button class="cart-btn" onclick="goToCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+    </button>
+</header>
 
-        <p>Beautiful Handmade Products</p>
+<div class="search-box">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search products..."
+        onkeyup="searchProducts()"
+    >
+</div>
 
-        <a href="cart.html" class="cart-button">
-            🛒 Cart (<span id="cartCount">0</span>)
-        </a>
+<div class="products-container">
+    <div id="productList">
 
-    </header>
-
-
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search products..."
-            onkeyup="searchProducts()"
-        >
-
-    </div>
-
-
-    <div class="products" id="productList">
-
-
-        <!-- Product 1 -->
+        <!-- EXISTING 10 PRODUCTS -->
 
         <div class="product">
-
-            <img
-                src="images/candle.jpg"
-                alt="Handmade Candle"
-            >
-
+            <img src="images/candle.jpg" alt="Candle">
             <h2>Candle</h2>
-
-            <p>Beautiful handmade candle</p>
-
-            <div class="price">₹199</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Candle', 199, this)"
-            >
+            <p>Beautiful handmade candle.</p>
+            <div class="price">&#8377;150</div>
+            <button class="buy-btn"
+                onclick="addToCart('Candle', 150, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 2 -->
-
         <div class="product">
-
-            <img
-                src="images/crochet-flower.jpg"
-                alt="Crochet Flower"
-            >
-
+            <img src="images/crochet-flower.jpg" alt="Crochet Flower">
             <h2>Crochet Flower</h2>
-
-            <p>Handmade crochet flower</p>
-
-            <div class="price">₹249</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Crochet Flower', 249, this)"
-            >
+            <p>Beautiful handmade crochet flower.</p>
+            <div class="price">&#8377;120</div>
+            <button class="buy-btn"
+                onclick="addToCart('Crochet Flower', 120, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 3 -->
-
         <div class="product">
-
-            <img
-                src="images/cute-notebook.jpg"
-                alt="Cute Notebook"
-            >
-
+            <img src="images/cute-notebook.jpg" alt="Cute Notebook">
             <h2>Cute Notebook</h2>
-
-            <p>Beautiful handmade notebook</p>
-
-            <div class="price">₹149</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Cute Notebook', 149, this)"
-            >
+            <p>Stylish notebook for everyday use.</p>
+            <div class="price">&#8377;180</div>
+            <button class="buy-btn"
+                onclick="addToCart('Cute Notebook', 180, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 4 -->
-
         <div class="product">
-
-            <img
-                src="images/gift-box.jpg"
-                alt="Gift Box"
-            >
-
+            <img src="images/gift-box.jpg" alt="Gift Box">
             <h2>Gift Box</h2>
-
-            <p>Beautiful handmade gift box</p>
-
-            <div class="price">₹399</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Gift Box', 399, this)"
-            >
+            <p>Beautiful handmade gift box.</p>
+            <div class="price">&#8377;250</div>
+            <button class="buy-btn"
+                onclick="addToCart('Gift Box', 250, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 5 -->
-
         <div class="product">
-
-            <img
-                src="images/handmade-bracelet.jpg"
-                alt="Handmade Bracelet"
-            >
-
+            <img src="images/handmade-bracelet.jpg" alt="Handmade Bracelet">
             <h2>Handmade Bracelet</h2>
-
-            <p>Beautiful handmade bracelet</p>
-
-            <div class="price">₹299</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Handmade Bracelet', 299, this)"
-            >
+            <p>Beautiful handmade bracelet.</p>
+            <div class="price">&#8377;200</div>
+            <button class="buy-btn"
+                onclick="addToCart('Handmade Bracelet', 200, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 6 -->
-
         <div class="product">
-
-            <img
-                src="images/mini-plant-pot.jpg"
-                alt="Mini Plant Pot"
-            >
-
+            <img src="images/mini-plant-pot.jpg" alt="Mini Plant Pot">
             <h2>Mini Plant Pot</h2>
-
-            <p>Small handmade plant pot</p>
-
-            <div class="price">₹349</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Mini Plant Pot', 349, this)"
-            >
+            <p>Cute decorative mini plant pot.</p>
+            <div class="price">&#8377;220</div>
+            <button class="buy-btn"
+                onclick="addToCart('Mini Plant Pot', 220, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 7 -->
-
         <div class="product">
-
-            <img
-                src="images/photo-frame.jpg"
-                alt="Photo Frame"
-            >
-
+            <img src="images/photo-frame.jpg" alt="Photo Frame">
             <h2>Photo Frame</h2>
-
-            <p>Beautiful handmade photo frame</p>
-
-            <div class="price">₹299</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Photo Frame', 299, this)"
-            >
+            <p>Beautiful decorative photo frame.</p>
+            <div class="price">&#8377;300</div>
+            <button class="buy-btn"
+                onclick="addToCart('Photo Frame', 300, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 8 -->
-
         <div class="product">
-
-            <img
-                src="images/resin-keychain.jpg"
-                alt="Resin Keychain"
-            >
-
+            <img src="images/resin-keychain.jpg" alt="Resin Keychain">
             <h2>Resin Keychain</h2>
-
-            <p>Colorful handmade keychain</p>
-
-            <div class="price">₹149</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Resin Keychain', 149, this)"
-            >
+            <p>Handmade resin keychain.</p>
+            <div class="price">&#8377;100</div>
+            <button class="buy-btn"
+                onclick="addToCart('Resin Keychain', 100, this)">
                 Add to Cart
             </button>
-
         </div>
 
-
-        <!-- Product 9 -->
-
         <div class="product">
-
-            <img
-                src="images/scrunchies.jpg"
-                alt="Scrunchies"
-            >
-
+            <img src="images/scrunchies.jpg" alt="Scrunchies">
             <h2>Scrunchies</h2>
-
-            <p>Beautiful handmade scrunchies</p>
-
-            <div class="price">₹99</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Scrunchies', 99, this)"
-            >
+            <p>Colorful handmade scrunchies.</p>
+            <div class="price">&#8377;80</div>
+            <button class="buy-btn"
+                onclick="addToCart('Scrunchies', 80, this)">
                 Add to Cart
             </button>
-
         </div>
-
-
-        <!-- Product 10 -->
 
         <div class="product">
-
-            <img
-                src="images/wall-hanging.jpg"
-                alt="Wall Hanging"
-            >
-
+            <img src="images/wall-hanging.jpg" alt="Wall Hanging">
             <h2>Wall Hanging</h2>
-
-            <p>Beautiful handmade wall decor</p>
-
-            <div class="price">₹399</div>
-
-            <button
-                class="buy-btn"
-                onclick="addToCart('Wall Hanging', 399, this)"
-            >
+            <p>Beautiful handmade wall hanging.</p>
+            <div class="price">&#8377;350</div>
+            <button class="buy-btn"
+                onclick="addToCart('Wall Hanging', 350, this)">
                 Add to Cart
             </button>
-
         </div>
-
 
     </div>
+</div>
 
-
-    <script>
-
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-
-        function addToCart(name, price, button) {
-
-            const existingProduct = cart.find(
-                item => item.name === name
-            );
-
-
-            if (existingProduct) {
-
-                existingProduct.quantity++;
-
-            } else {
-
-                cart.push({
-                    name: name,
-                    price: price,
-                    quantity: 1
-                });
-
-            }
-
-
-            localStorage.setItem(
-                "cart",
-                JSON.stringify(cart)
-            );
-
-
-            updateCartCount();
-
-
-            button.textContent = "✓ Added";
-
-            button.classList.add("added");
-
-
-            setTimeout(() => {
-
-                button.textContent = "Add to Cart";
-
-                button.classList.remove("added");
-
-            }, 1000);
-
-        }
-
-
-        function updateCartCount() {
-
-            let count = 0;
-
-            cart.forEach(item => {
-                count += item.quantity;
-            });
-
-            document.getElementById("cartCount").textContent =
-                count;
-
-        }
-
-
-        function searchProducts() {
-
-            const searchValue =
-                document.getElementById("searchInput")
-                .value
-                .toLowerCase();
-
-            const products =
-                document.querySelectorAll(".product");
-
-
-            products.forEach(product => {
-
-                const productName =
-                    product.querySelector("h2")
-                    .textContent
-                    .toLowerCase();
-
-                if (productName.includes(searchValue)) {
-
-                    product.style.display = "block";
-
-                } else {
-
-                    product.style.display = "none";
-
-                }
-
-            });
-
-        }
-
-
-        updateCartCount();
-
-    </script>
-
-</body>
-
-</html>
 <script>
+
+    // CART
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    function addToCart(name, price, button) {
-        const existingProduct = cart.find(
-            item => item.name === name
-        );
 
-        if (existingProduct) {
-            existingProduct.quantity++;
-        } else {
-            cart.push({
-                name: name,
-                price: price,
-                quantity: 1
-            });
-        }
+    function addToCart(name, price, button) {
+
+        cart.push({
+            name: name,
+            price: Number(price)
+        });
 
         localStorage.setItem("cart", JSON.stringify(cart));
 
         updateCartCount();
 
-        button.textContent = "✓ Added";
-        button.classList.add("added");
+        button.innerText = "Added ✓";
 
-        setTimeout(() => {
-            button.textContent = "Add to Cart";
-            button.classList.remove("added");
+        setTimeout(function() {
+            button.innerText = "Add to Cart";
         }, 1000);
     }
 
+
     function updateCartCount() {
-        let count = 0;
 
-        cart.forEach(item => {
-            count += item.quantity;
-        });
-
-        document.getElementById("cartCount").textContent = count;
+        document.getElementById("cartCount").innerText = cart.length;
     }
 
+
+    function goToCart() {
+
+        window.location.href = "cart.html";
+    }
+
+
+    // SEARCH
+    function searchProducts() {
+
+        const searchText =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const products =
+            document.querySelectorAll(".product");
+
+        products.forEach(function(product) {
+
+            const productName =
+                product.querySelector("h2")
+                .innerText
+                .toLowerCase();
+
+            if (productName.includes(searchText)) {
+                product.style.display = "";
+            } else {
+                product.style.display = "none";
+            }
+        });
+    }
+
+
+    // LOAD SELLER PRODUCTS
+    async function loadSellerProducts() {
+
+        try {
+
+            const response =
+                await fetch("seller-products?format=json");
+
+            if (!response.ok) {
+                return;
+            }
+
+            const sellerProducts =
+                await response.json();
+
+            const productList =
+                document.getElementById("productList");
+
+
+            // Get existing product names
+            const existingNames =
+                new Set(
+                    Array.from(
+                        document.querySelectorAll(".product h2")
+                    ).map(function(item) {
+                        return item.innerText.trim().toLowerCase();
+                    })
+                );
+
+
+            sellerProducts.forEach(function(product) {
+
+                // Don't duplicate existing 10 products
+                if (
+                    existingNames.has(
+                        product.name.trim().toLowerCase()
+                    )
+                ) {
+                    return;
+                }
+
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "product";
+
+
+                const image =
+                    document.createElement("img");
+
+                image.src =
+                    "images/" + product.image;
+
+                image.alt = product.name;
+
+
+                const title =
+                    document.createElement("h2");
+
+                title.innerText =
+                    product.name;
+
+
+                const description =
+                    document.createElement("p");
+
+                description.innerText =
+                    product.description;
+
+
+                const price =
+                    document.createElement("div");
+
+                price.className = "price";
+
+                price.innerHTML =
+                    "&#8377;" +
+                    Number(product.price).toFixed(2);
+
+
+                const button =
+                    document.createElement("button");
+
+                button.className = "buy-btn";
+
+                button.innerText =
+                    "Add to Cart";
+
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        addToCart(
+                            product.name,
+                            Number(product.price),
+                            button
+                        );
+
+                    }
+                );
+
+
+                card.appendChild(image);
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(price);
+                card.appendChild(button);
+
+
+                productList.appendChild(card);
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Seller products loading failed:",
+                error
+            );
+        }
+    }
+
+
     updateCartCount();
+
+    loadSellerProducts();
+
 </script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AyishaMart - My Products</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f0ff;
+        }
+
+        .header {
+            background: #4b3f72;
+            color: white;
+            padding: 25px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .top h2 {
+            color: #4b3f72;
+        }
+
+        .button {
+            background: #6c5ce7;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .product h3 {
+            color: #4b3f72;
+        }
+
+        .product p {
+            color: #666;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00a884;
+        }
+
+        .stock {
+            font-weight: bold;
+        }
+
+        .edit {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+
+        .delete {
+            background: #d9534f;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>AyishaMart</h1>
+        <p>Seller Panel</p>
+    </div>
+
+    <div class="container">
+
+        <div class="top">
+            <h2>📦 My Products</h2>
+
+            <a href="add-product.html" class="button">
+                + Add Product
+            </a>
+        </div>
+
+        <div class="products">
+
+            <!-- Products will come from database here -->
+
+        </div>
+
+    </div>
+
+</body>
+</html>

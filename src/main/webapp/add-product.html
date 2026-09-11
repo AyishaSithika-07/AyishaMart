@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AyishaMart - Add Product</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f0ff;
+        }
+
+        .header {
+            background: #4b3f72;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            width: 420px;
+            margin: 40px auto;
+        }
+
+        .form-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #4b3f72;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+        }
+
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 11px;
+            border: none;
+            border-radius: 6px;
+            background: #6c5ce7;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5849c2;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #4b3f72;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>AyishaMart</h1>
+
+        <p>Add New Product</p>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="form-box">
+
+            <h2>➕ Add Product</h2>
+
+            <form action="add-product" method="post">
+
+                <label>Product Name</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter product name"
+                    required
+                >
+
+
+                <label>Description</label>
+
+                <textarea
+                    name="description"
+                    placeholder="Enter product description"
+                    required
+                ></textarea>
+
+
+                <label>Category</label>
+
+                <input
+                    type="text"
+                    name="category"
+                    placeholder="Example: Handmade"
+                    required
+                >
+
+
+                <label>Price</label>
+
+                <input
+                    type="number"
+                    name="price"
+                    step="0.01"
+                    min="0"
+                    placeholder="Enter price"
+                    required
+                >
+
+
+                <label>Stock</label>
+
+                <input
+                    type="number"
+                    name="stock"
+                    min="0"
+                    placeholder="Enter stock quantity"
+                    required
+                >
+
+
+                <label>Image File Name</label>
+
+                <input
+                    type="text"
+                    name="image"
+                    placeholder="example.jpg"
+                >
+
+
+                <button type="submit">
+                    Add Product
+                </button>
+
+            </form action="add-product"method="post">
+
+
+            <a href="seller-dashboard.html" class="back">
+                ← Back to Seller Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

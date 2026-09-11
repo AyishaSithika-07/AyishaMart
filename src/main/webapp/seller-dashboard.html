@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AyishaMart - Seller Dashboard</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f0ff;
+        }
+
+        /* Top Header */
+        .header {
+            background: #4b3f72;
+            color: white;
+            padding: 25px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #ddd6f3;
+        }
+
+        /* Main Area */
+        .container {
+            width: 85%;
+            margin: 30px auto;
+        }
+
+        /* Welcome Box */
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .welcome h2 {
+            margin: 0 0 8px;
+            color: #4b3f72;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        /* Cards */
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 280px;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            color: #4b3f72;
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #666;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 9px 15px;
+            margin-top: 8px;
+            margin-right: 5px;
+            background: #6c5ce7;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background: #5849c2;
+        }
+
+        .green {
+            background: #00a884;
+        }
+
+        .green:hover {
+            background: #008f70;
+        }
+
+        .orange {
+            background: #e67e22;
+        }
+
+        .orange:hover {
+            background: #ca6f1e;
+        }
+
+        /* Bottom */
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>AyishaMart</h1>
+
+        <p>Seller Dashboard</p>
+
+    </div>
+
+
+    <!-- Main -->
+
+    <div class="container">
+
+
+        <!-- Welcome -->
+
+        <div class="welcome">
+
+            <h2>Welcome, Seller! 👋</h2>
+
+            <p>
+                Manage your products and keep track of your customer orders.
+            </p>
+
+        </div>
+
+
+        <!-- Dashboard Cards -->
+
+        <div class="cards">
+
+
+            <!-- Product Card -->
+
+            <div class="card">
+
+                <h2>📦 My Products</h2>
+
+                <p>
+                    Add new products and manage your existing products.
+                </p>
+
+                <a href="add-product.html" class="button">
+                    Add Product
+                </a>
+
+                <a href="products.html" class="button">
+                    View Products
+                </a>
+
+            </div>
+
+
+            <!-- Order Card -->
+
+            <div class="card">
+
+                <h2>🛒 Customer Orders</h2>
+
+                <p>
+                    Check the orders placed by your customers.
+                </p>
+
+                <a href="#" class="button green">
+                    View Orders
+                </a>
+
+            </div>
+
+
+            <!-- Activity Card -->
+
+            <div class="card">
+
+                <h2>📊 Seller Activity</h2>
+
+                <p>
+                    Keep your products and orders organized.
+                </p>
+
+                <a href="#" class="button orange">
+                    View Activity
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- Footer -->
+
+        <div class="footer">
+
+            <p>© 2026 AyishaMart | Seller Panel</p>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

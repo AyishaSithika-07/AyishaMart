@@ -21,7 +21,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT username, role FROM users WHERE username = ? AND password = ?";
 
         try {
             Connection con = DBConnection.getConnection();
@@ -35,8 +35,24 @@ public class LoginServlet extends HttpServlet {
 
             if (rs.next()) {
 
-                // Login successful
-                response.sendRedirect("welcome.html");
+                String role = rs.getString("role");
+
+                if ("BUYER".equals(role)) {
+
+                    response.sendRedirect("welcome.html");
+
+                } else if ("SELLER".equals(role)) {
+
+                    response.sendRedirect("seller-dashboard.html");
+
+                } else if ("ADMIN".equals(role)) {
+
+                    response.sendRedirect("admin-dashboard.html");
+
+                } else {
+
+                    response.getWriter().println("Invalid user role!");
+                }
 
             } else {
 
