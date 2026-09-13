@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -21,7 +22,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        String sql = "SELECT username, role FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT id, username, role FROM users WHERE username = ? AND password = ?";
 
         try {
             Connection con = DBConnection.getConnection();
@@ -35,7 +36,15 @@ public class LoginServlet extends HttpServlet {
 
             if (rs.next()) {
 
+                int userId = rs.getInt("id");
+                String loggedInUsername = rs.getString("username");
                 String role = rs.getString("role");
+
+                HttpSession session = request.getSession();
+
+                session.setAttribute("userId", userId);
+                session.setAttribute("username", loggedInUsername);
+                session.setAttribute("role", role);
 
                 if ("BUYER".equals(role)) {
 

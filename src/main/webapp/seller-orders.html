@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Customer Orders</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f0ff;
+        }
+
+        .header {
+            background: #4b3f72;
+            color: white;
+            padding: 25px 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 16px;
+            background: #6c5ce7;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .orders-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        h2 {
+            color: #4b3f72;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #4b3f72;
+            color: white;
+            padding: 14px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        select {
+            padding: 6px;
+        }
+
+        .update-btn {
+            padding: 7px 12px;
+            background: #00a884;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #008f70;
+        }
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 16px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="header">
+
+        <h1>Customer Orders</h1>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <a href="seller-dashboard.html" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+
+        <div class="orders-box">
+
+            <h2>Customer Orders</h2>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Order ID</th>
+
+                        <th>Customer</th>
+
+                        <th>Product</th>
+
+                        <th>Quantity</th>
+
+                        <th>Total Amount</th>
+
+                        <th>Payment Method</th>
+
+                        <th>Status</th>
+
+                        <th>Update</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="ordersTableBody">
+
+                    <tr>
+                        <td colspan="8" class="message">
+                            Loading orders...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        async function loadOrders() {
+
+            const tableBody =
+                document.getElementById("ordersTableBody");
+
+            try {
+
+                const response =
+                    await fetch("seller-orders?format=json");
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load orders"
+                    );
+
+                }
+
+                const orders =
+                    await response.json();
+
+
+                tableBody.innerHTML = "";
+
+
+                if (orders.length === 0) {
+
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="message">
+                                No customer orders found.
+                            </td>
+                        </tr>
+                    `;
+
+                    return;
+                }
+
+
+                orders.forEach(function(order) {
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${order.orderId}
+                        </td>
+
+                        <td>
+                            ${order.customerName}
+                        </td>
+
+                        <td>
+                            ${order.productName}
+                        </td>
+
+                        <td>
+                            ${order.quantity}
+                        </td>
+
+                        <td>
+                            &#8377;${Number(order.totalAmount).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${order.paymentMethod}
+                        </td>
+
+                        <td>
+
+                            <select id="status-${order.orderId}">
+
+                                <option value="Pending"
+                                    ${order.status === "Pending" ? "selected" : ""}>
+                                    Pending
+                                </option>
+
+                                <option value="Confirmed"
+                                    ${order.status === "Confirmed" ? "selected" : ""}>
+                                    Confirmed
+                                </option>
+
+                                <option value="Shipped"
+                                    ${order.status === "Shipped" ? "selected" : ""}>
+                                    Shipped
+                                </option>
+
+                                <option value="Delivered"
+                                    ${order.status === "Delivered" ? "selected" : ""}>
+                                    Delivered
+                                </option>
+
+                            </select>
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="update-btn"
+                                onclick="updateStatus(${order.orderId})">
+                                Update
+                            </button>
+
+                        </td>
+
+                    `;
+
+
+                    tableBody.appendChild(row);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Orders loading error:",
+                    error
+                );
+
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="message">
+                            Unable to load customer orders.
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+
+        async function updateStatus(orderId) {
+
+            const select =
+                document.getElementById(
+                    "status-" + orderId
+                );
+
+
+            const status =
+                select.value;
+
+
+            try {
+
+                const formData =
+                    new URLSearchParams();
+
+
+                formData.append(
+                    "orderId",
+                    orderId
+                );
+
+
+                formData.append(
+                    "status",
+                    status
+                );
+
+
+                const response =
+                    await fetch(
+                        "seller-orders",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/x-www-form-urlencoded"
+                            },
+
+                            body:
+                                formData.toString()
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Status update failed"
+                    );
+
+                }
+
+
+                alert(
+                    "Order status updated successfully!"
+                );
+
+
+                loadOrders();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Status update error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to update order status."
+                );
+
+            }
+
+        }
+
+
+        loadOrders();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -61,32 +61,39 @@
         .order-item {
             display: flex;
             justify-content: space-between;
-            padding: 14px 0;
+            align-items: center;
+            padding: 15px 0;
             border-bottom: 1px solid #eee;
         }
 
-        .order-item span:first-child {
-            color: #555;
+        .item-name {
+            font-weight: bold;
+            color: #333;
         }
 
-        .order-item span:last-child {
+        .item-details {
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .item-total {
             font-weight: bold;
+            color: #7b2cbf;
         }
 
         .total {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-            padding-top: 18px;
+            padding-top: 20px;
             border-top: 2px solid #eee;
             font-size: 22px;
             font-weight: bold;
-            color: #7b2cbf;
         }
 
         .payment-option {
             display: block;
-            padding: 15px;
+            padding: 18px;
             margin-bottom: 12px;
             border: 1px solid #ddd;
             border-radius: 12px;
@@ -101,7 +108,7 @@
             margin-right: 10px;
         }
 
-        .place-order {
+        .place-order-button {
             width: 100%;
             padding: 16px;
             border: none;
@@ -113,137 +120,343 @@
             cursor: pointer;
         }
 
-        .place-order:hover {
-            transform: scale(1.02);
+        .place-order-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
-        .back-button {
-            display: block;
+        .empty {
             text-align: center;
-            margin-top: 18px;
-            color: #7b2cbf;
-            text-decoration: none;
-            font-weight: bold;
+            color: #777;
+            padding: 30px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <div class="header">
-            <h1>Checkout</h1>
-            <p>Complete your order</p>
-        </div>
+    <div class="header">
+        <h1>Checkout</h1>
+        <p>Complete your order</p>
+    </div>
 
-        <div class="box">
 
-            <h2>🛍️ Order Summary</h2>
+    <!-- ORDER SUMMARY -->
 
-            <div id="orderSummary"></div>
+    <div class="box">
 
-            <div class="total">
-                <span>Total:</span>
-                <span id="checkoutTotal">₹0</span>
-            </div>
+        <h2>🛍️ Order Summary</h2>
 
-        </div>
+        <div id="orderItems"></div>
 
-        <div class="box">
-
-            <h2>💳 Payment Method</h2>
-
-            <label class="payment-option">
-                <input type="radio" name="payment" value="Cash on Delivery" checked>
-                Cash on Delivery
-            </label>
-
-            <label class="payment-option">
-                <input type="radio" name="payment" value="UPI">
-                UPI
-            </label>
-
-            <label class="payment-option">
-                <input type="radio" name="payment" value="Card">
-                Card
-            </label>
-
-            <button class="place-order" onclick="placeOrder()">
-                Place Order
-            </button>
-
-            <a href="cart.html" class="back-button">
-                ← Back to Cart
-            </a>
-
+        <div class="total">
+            <span>Total:</span>
+            <span id="orderTotal">₹0</span>
         </div>
 
     </div>
 
-    <script>
 
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    <!-- PAYMENT METHOD -->
 
-        function displayOrder() {
+    <div class="box">
 
-            const summary = document.getElementById("orderSummary");
-            const totalElement = document.getElementById("checkoutTotal");
+        <h2>💳 Payment Method</h2>
 
-            summary.innerHTML = "";
+        <label class="payment-option">
+            <input
+                type="radio"
+                name="payment"
+                value="COD"
+                checked
+            >
+            Cash on Delivery
+        </label>
 
-            let total = 0;
+        <label class="payment-option">
+            <input
+                type="radio"
+                name="payment"
+                value="UPI"
+            >
+            UPI
+        </label>
 
-            cart.forEach(item => {
+        <label class="payment-option">
+            <input
+                type="radio"
+                name="payment"
+                value="Card"
+            >
+            Card
+        </label>
 
-                const itemTotal = item.price * item.quantity;
+    </div>
 
-                total += itemTotal;
 
-                const div = document.createElement("div");
+    <!-- PLACE ORDER -->
 
-                div.className = "order-item";
+    <div class="box">
 
-                div.innerHTML = `
-                    <span>
-                        ${item.name} × ${item.quantity}
-                    </span>
+        <button
+            id="placeOrderButton"
+            class="place-order-button"
+            onclick="placeOrder()"
+        >
+            Place Order
+        </button>
 
-                    <span>
-                        ₹${itemTotal}
-                    </span>
-                `;
+    </div>
 
-                summary.appendChild(div);
-            });
+</div>
 
-            totalElement.textContent = "₹" + total;
+
+<script>
+
+    let cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+
+    // Make sure old cart data does not cause undefined / NaN
+
+    cart = cart.map(function(item) {
+
+        return {
+            id: Number(item.id) || 0,
+            name: item.name || "Unknown Product",
+            price: Number(item.price) || 0,
+            quantity: Number(item.quantity) || 1
+        };
+
+    });
+
+
+    function displayOrder() {
+
+        const orderItems =
+            document.getElementById("orderItems");
+
+        const orderTotal =
+            document.getElementById("orderTotal");
+
+        orderItems.innerHTML = "";
+
+
+        if (cart.length === 0) {
+
+            orderItems.innerHTML =
+                '<div class="empty">Your cart is empty.</div>';
+
+            orderTotal.textContent = "₹0";
+
+            return;
         }
 
-        function placeOrder() {
 
-            if (cart.length === 0) {
-                alert("Your cart is empty!");
-                window.location.href = "products.html";
-                return;
+        let total = 0;
+
+
+        cart.forEach(function(item) {
+
+            const price =
+                Number(item.price) || 0;
+
+            const quantity =
+                Number(item.quantity) || 1;
+
+            const itemTotal =
+                price * quantity;
+
+            total += itemTotal;
+
+
+            const itemDiv =
+                document.createElement("div");
+
+            itemDiv.className = "order-item";
+
+
+            itemDiv.innerHTML = `
+
+                <div>
+                    <div class="item-name">
+                        ${item.name}
+                    </div>
+
+                    <div class="item-details">
+                        ₹${price} × ${quantity}
+                    </div>
+                </div>
+
+                <div class="item-total">
+                    ₹${itemTotal}
+                </div>
+
+            `;
+
+
+            orderItems.appendChild(itemDiv);
+
+        });
+
+
+        orderTotal.textContent =
+            "₹" + total;
+
+    }
+
+
+    async function placeOrder() {
+
+        if (cart.length === 0) {
+
+            alert("Your cart is empty!");
+
+            window.location.href =
+                "products.html";
+
+            return;
+        }
+
+
+        const selectedPayment =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            );
+
+
+        if (!selectedPayment) {
+
+            alert(
+                "Please select a payment method."
+            );
+
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "placeOrderButton"
+            );
+
+
+        button.disabled = true;
+
+        button.innerText =
+            "Placing Order...";
+
+
+        try {
+
+            const formData =
+                new URLSearchParams();
+
+
+            formData.append(
+                "paymentMethod",
+                selectedPayment.value
+            );
+
+
+            cart.forEach(function(item) {
+
+                formData.append(
+                    "productId",
+                    item.id
+                );
+
+                formData.append(
+                    "quantity",
+                    item.quantity
+                );
+
+                formData.append(
+                    "price",
+                    item.price
+                );
+
+            });
+
+
+            const response =
+                await fetch(
+                    "place-order",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+
+                        body:
+                            formData.toString()
+                    }
+                );
+
+
+            const result =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(result);
+
             }
 
-            const selectedPayment =
-                document.querySelector(
-                    'input[name="payment"]:checked'
-                ).value;
+
+            const orderId =
+                result.trim();
+
+
+            localStorage.setItem(
+                "lastOrderId",
+                orderId
+            );
+
 
             localStorage.setItem(
                 "paymentMethod",
-                selectedPayment
+                selectedPayment.value
             );
 
-            window.location.href = "order-success.html";
+
+            localStorage.removeItem("cart");
+
+
+            window.location.href =
+                "order-success.html";
+
+
+        } catch (error) {
+
+            console.error(
+                "Order placement error:",
+                error
+            );
+
+
+            alert(
+                "Order placement failed. Please try again."
+            );
+
+
+            button.disabled = false;
+
+            button.innerText =
+                "Place Order";
         }
 
-        displayOrder();
+    }
 
-    </script>
+
+    displayOrder();
+
+</script>
 
 </body>
 </html>

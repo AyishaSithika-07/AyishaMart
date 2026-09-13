@@ -58,6 +58,11 @@
             justify-content: space-between;
             padding: 18px 0;
             border-bottom: 1px solid #eee;
+            gap: 20px;
+        }
+
+        .item-info {
+            flex: 1;
         }
 
         .item-info h3 {
@@ -88,11 +93,15 @@
 
         .quantity span {
             font-weight: bold;
+            min-width: 20px;
+            text-align: center;
         }
 
         .item-price {
             font-weight: bold;
             color: #7b2cbf;
+            min-width: 90px;
+            text-align: right;
         }
 
         .total {
@@ -128,6 +137,21 @@
             color: #777;
             padding: 40px;
         }
+
+        @media (max-width: 600px) {
+            .cart-item {
+                flex-wrap: wrap;
+            }
+
+            .item-info {
+                width: 100%;
+                flex: none;
+            }
+
+            .item-price {
+                min-width: auto;
+            }
+        }
     </style>
 </head>
 
@@ -158,12 +182,31 @@
     </div>
 
     <script>
+
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Fix old cart data
+        cart = cart.map(function(item) {
+
+            return {
+                id: Number(item.id) || 0,
+                name: item.name || "Unknown Product",
+                price: Number(item.price) || 0,
+                quantity: Number(item.quantity) || 1
+            };
+
+        });
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
 
         function displayCart() {
 
-            const cartItems = document.getElementById("cartItems");
-            const cartTotal = document.getElementById("cartTotal");
+            const cartItems =
+                document.getElementById("cartItems");
+
+            const cartTotal =
+                document.getElementById("cartTotal");
 
             cartItems.innerHTML = "";
 
@@ -173,35 +216,50 @@
                     '<div class="empty">Your cart is empty.</div>';
 
                 cartTotal.textContent = "₹0";
+
                 return;
             }
 
             let total = 0;
 
-            cart.forEach((item, index) => {
+            cart.forEach(function(item, index) {
 
-                total += item.price * item.quantity;
+                const price = Number(item.price) || 0;
+                const quantity = Number(item.quantity) || 1;
 
-                const itemDiv = document.createElement("div");
+                const itemTotal = price * quantity;
+
+                total += itemTotal;
+
+                const itemDiv =
+                    document.createElement("div");
 
                 itemDiv.className = "cart-item";
 
                 itemDiv.innerHTML = `
                     <div class="item-info">
                         <h3>${item.name}</h3>
-                        <p>₹${item.price}</p>
+                        <p>₹${price}</p>
                     </div>
 
                     <div class="quantity">
-                        <button onclick="decreaseQuantity(${index})">−</button>
 
-                        <span>${item.quantity}</span>
+                        <button
+                            onclick="decreaseQuantity(${index})">
+                            −
+                        </button>
 
-                        <button onclick="increaseQuantity(${index})">+</button>
+                        <span>${quantity}</span>
+
+                        <button
+                            onclick="increaseQuantity(${index})">
+                            +
+                        </button>
+
                     </div>
 
                     <div class="item-price">
-                        ₹${item.price * item.quantity}
+                        ₹${itemTotal}
                     </div>
                 `;
 
@@ -211,42 +269,61 @@
             cartTotal.textContent = "₹" + total;
         }
 
+
         function increaseQuantity(index) {
 
-            cart[index].quantity++;
+            cart[index].quantity =
+                Number(cart[index].quantity) + 1;
 
             saveCart();
         }
 
+
         function decreaseQuantity(index) {
 
-            if (cart[index].quantity > 1) {
-                cart[index].quantity--;
+            const quantity =
+                Number(cart[index].quantity) || 1;
+
+            if (quantity > 1) {
+
+                cart[index].quantity =
+                    quantity - 1;
+
             } else {
+
                 cart.splice(index, 1);
             }
 
             saveCart();
         }
 
+
         function saveCart() {
 
-            localStorage.setItem("cart", JSON.stringify(cart));
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
 
             displayCart();
         }
 
+
         function goToCheckout() {
 
             if (cart.length === 0) {
+
                 alert("Your cart is empty!");
+
                 return;
             }
 
             window.location.href = "checkout.html";
         }
 
+
         displayCart();
+
     </script>
 
 </body>

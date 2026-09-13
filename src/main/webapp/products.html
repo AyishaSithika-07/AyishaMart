@@ -96,19 +96,41 @@
             margin: 12px 0;
         }
 
-        .buy-btn {
+        .buy-btn,
+        .edit-btn,
+        .delete-btn {
             width: 100%;
             padding: 11px;
             border: none;
-            background: #6a1b9a;
             color: white;
             border-radius: 7px;
             cursor: pointer;
             font-size: 15px;
+            margin-top: 8px;
+        }
+
+        .buy-btn {
+            background: #6a1b9a;
         }
 
         .buy-btn:hover {
             background: #4a126d;
+        }
+
+        .edit-btn {
+            background: #1976d2;
+        }
+
+        .edit-btn:hover {
+            background: #125a9c;
+        }
+
+        .delete-btn {
+            background: #d32f2f;
+        }
+
+        .delete-btn:hover {
+            background: #a52222;
         }
     </style>
 </head>
@@ -116,170 +138,134 @@
 <body>
 
 <header>
+
     <h1>AyishaMart</h1>
 
     <button class="cart-btn" onclick="goToCart()">
         🛒 Cart (<span id="cartCount">0</span>)
     </button>
+
 </header>
 
+
 <div class="search-box">
+
     <input
         type="text"
         id="searchInput"
         placeholder="Search products..."
         onkeyup="searchProducts()"
     >
+
 </div>
+
 
 <div class="products-container">
-    <div id="productList">
 
-        <!-- EXISTING 10 PRODUCTS -->
+    <div id="productList"></div>
 
-        <div class="product">
-            <img src="images/candle.jpg" alt="Candle">
-            <h2>Candle</h2>
-            <p>Beautiful handmade candle.</p>
-            <div class="price">&#8377;150</div>
-            <button class="buy-btn"
-                onclick="addToCart('Candle', 150, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/crochet-flower.jpg" alt="Crochet Flower">
-            <h2>Crochet Flower</h2>
-            <p>Beautiful handmade crochet flower.</p>
-            <div class="price">&#8377;120</div>
-            <button class="buy-btn"
-                onclick="addToCart('Crochet Flower', 120, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/cute-notebook.jpg" alt="Cute Notebook">
-            <h2>Cute Notebook</h2>
-            <p>Stylish notebook for everyday use.</p>
-            <div class="price">&#8377;180</div>
-            <button class="buy-btn"
-                onclick="addToCart('Cute Notebook', 180, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/gift-box.jpg" alt="Gift Box">
-            <h2>Gift Box</h2>
-            <p>Beautiful handmade gift box.</p>
-            <div class="price">&#8377;250</div>
-            <button class="buy-btn"
-                onclick="addToCart('Gift Box', 250, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/handmade-bracelet.jpg" alt="Handmade Bracelet">
-            <h2>Handmade Bracelet</h2>
-            <p>Beautiful handmade bracelet.</p>
-            <div class="price">&#8377;200</div>
-            <button class="buy-btn"
-                onclick="addToCart('Handmade Bracelet', 200, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/mini-plant-pot.jpg" alt="Mini Plant Pot">
-            <h2>Mini Plant Pot</h2>
-            <p>Cute decorative mini plant pot.</p>
-            <div class="price">&#8377;220</div>
-            <button class="buy-btn"
-                onclick="addToCart('Mini Plant Pot', 220, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/photo-frame.jpg" alt="Photo Frame">
-            <h2>Photo Frame</h2>
-            <p>Beautiful decorative photo frame.</p>
-            <div class="price">&#8377;300</div>
-            <button class="buy-btn"
-                onclick="addToCart('Photo Frame', 300, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/resin-keychain.jpg" alt="Resin Keychain">
-            <h2>Resin Keychain</h2>
-            <p>Handmade resin keychain.</p>
-            <div class="price">&#8377;100</div>
-            <button class="buy-btn"
-                onclick="addToCart('Resin Keychain', 100, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/scrunchies.jpg" alt="Scrunchies">
-            <h2>Scrunchies</h2>
-            <p>Colorful handmade scrunchies.</p>
-            <div class="price">&#8377;80</div>
-            <button class="buy-btn"
-                onclick="addToCart('Scrunchies', 80, this)">
-                Add to Cart
-            </button>
-        </div>
-
-        <div class="product">
-            <img src="images/wall-hanging.jpg" alt="Wall Hanging">
-            <h2>Wall Hanging</h2>
-            <p>Beautiful handmade wall hanging.</p>
-            <div class="price">&#8377;350</div>
-            <button class="buy-btn"
-                onclick="addToCart('Wall Hanging', 350, this)">
-                Add to Cart
-            </button>
-        </div>
-
-    </div>
 </div>
+
 
 <script>
 
-    // CART
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
+
+    let currentUserRole = "NONE";
 
 
-    function addToCart(name, price, button) {
+    // GET LOGGED-IN USER ROLE
 
-        cart.push({
-            name: name,
-            price: Number(price)
-        });
+    async function loadUserRole() {
 
-        localStorage.setItem("cart", JSON.stringify(cart));
+        try {
+
+            const response =
+                await fetch("user-role");
+
+            if (!response.ok) {
+
+                currentUserRole = "NONE";
+                return;
+            }
+
+            const role =
+                await response.text();
+
+            currentUserRole =
+                role.trim().toUpperCase();
+
+        } catch (error) {
+
+            console.error(
+                "User role loading error:",
+                error
+            );
+
+            currentUserRole = "NONE";
+        }
+    }
+
+
+    // ADD TO CART
+
+    function addToCart(id, name, price, button) {
+
+        const existingItem =
+            cart.find(function(item) {
+                return Number(item.id) === Number(id);
+            });
+
+        if (existingItem) {
+
+            existingItem.quantity++;
+
+        } else {
+
+            cart.push({
+                id: Number(id),
+                name: name,
+                price: Number(price),
+                quantity: 1
+            });
+        }
+
+        localStorage.setItem(
+            "cart",
+            JSON.stringify(cart)
+        );
 
         updateCartCount();
 
         button.innerText = "Added ✓";
 
         setTimeout(function() {
+
             button.innerText = "Add to Cart";
+
         }, 1000);
     }
 
 
+    // UPDATE CART COUNT
+
     function updateCartCount() {
 
-        document.getElementById("cartCount").innerText = cart.length;
+        let count = 0;
+
+        cart.forEach(function(item) {
+
+            count += Number(item.quantity) || 1;
+
+        });
+
+        document.getElementById("cartCount").innerText =
+            count;
     }
 
+
+    // GO TO CART
 
     function goToCart() {
 
@@ -287,7 +273,199 @@
     }
 
 
-    // SEARCH
+    // LOAD PRODUCTS
+
+    async function loadProducts() {
+
+        try {
+
+            const response =
+                await fetch("seller-products?format=json");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Products could not be loaded"
+                );
+            }
+
+            const products =
+                await response.json();
+
+            const productList =
+                document.getElementById("productList");
+
+            productList.innerHTML = "";
+
+
+            products.forEach(function(product) {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "product";
+
+                card.setAttribute(
+                    "data-product-id",
+                    product.id
+                );
+
+
+                // IMAGE
+
+                const image =
+                    document.createElement("img");
+
+                image.src =
+                    "images/" + product.image;
+
+                image.alt =
+                    product.name;
+
+
+                // NAME
+
+                const title =
+                    document.createElement("h2");
+
+                title.innerText =
+                    product.name;
+
+
+                // DESCRIPTION
+
+                const description =
+                    document.createElement("p");
+
+                description.innerText =
+                    product.description;
+
+
+                // PRICE
+
+                const price =
+                    document.createElement("div");
+
+                price.className =
+                    "price";
+
+                price.innerHTML =
+                    "&#8377;" +
+                    Number(product.price).toFixed(2);
+
+
+                // ADD TO CART
+
+                const cartButton =
+                    document.createElement("button");
+
+                cartButton.className =
+                    "buy-btn";
+
+                cartButton.innerText =
+                    "Add to Cart";
+
+                cartButton.addEventListener(
+                    "click",
+                    function() {
+
+                        addToCart(
+                            product.id,
+                            product.name,
+                            Number(product.price),
+                            cartButton
+                        );
+
+                    }
+                );
+
+
+                // ADD BASIC DETAILS
+
+                card.appendChild(image);
+                card.appendChild(title);
+                card.appendChild(description);
+                card.appendChild(price);
+                card.appendChild(cartButton);
+
+
+                // EDIT + DELETE ONLY FOR SELLER / ADMIN
+
+                if (
+                    currentUserRole === "SELLER" ||
+                    currentUserRole === "ADMIN"
+                ) {
+
+                    const editButton =
+                        document.createElement("button");
+
+                    editButton.className =
+                        "edit-btn";
+
+                    editButton.innerText =
+                        "Edit Product";
+
+                    editButton.addEventListener(
+                        "click",
+                        function() {
+
+                            window.location.href =
+                                "edit-product?id=" +
+                                product.id;
+
+                        }
+                    );
+
+
+                    const deleteButton =
+                        document.createElement("button");
+
+                    deleteButton.className =
+                        "delete-btn";
+
+                    deleteButton.innerText =
+                        "Delete Product";
+
+                    deleteButton.addEventListener(
+                        "click",
+                        function() {
+
+                            deleteProduct(
+                                product.id,
+                                card
+                            );
+
+                        }
+                    );
+
+
+                    card.appendChild(editButton);
+                    card.appendChild(deleteButton);
+                }
+
+
+                productList.appendChild(card);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Product loading error:",
+                error
+            );
+
+            document.getElementById(
+                "productList"
+            ).innerHTML =
+                "<p>Products could not be loaded.</p>";
+        }
+    }
+
+
+    // SEARCH PRODUCTS
+
     function searchProducts() {
 
         const searchText =
@@ -305,143 +483,97 @@
                 .innerText
                 .toLowerCase();
 
-            if (productName.includes(searchText)) {
+            if (
+                productName.includes(searchText)
+            ) {
+
                 product.style.display = "";
+
             } else {
+
                 product.style.display = "none";
+
             }
+
         });
     }
 
 
-    // LOAD SELLER PRODUCTS
-    async function loadSellerProducts() {
+    // DELETE PRODUCT
 
-        try {
+    function deleteProduct(id, card) {
 
-            const response =
-                await fetch("seller-products?format=json");
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this product?"
+            );
 
-            if (!response.ok) {
-                return;
+        if (!confirmDelete) {
+            return;
+        }
+
+
+        fetch(
+            "delete-product?id=" + id,
+            {
+                method: "GET"
+            }
+        )
+        .then(function(response) {
+
+            if (response.ok) {
+
+                cart = cart.filter(function(item) {
+
+                    return Number(item.id) !== Number(id);
+
+                });
+
+                localStorage.setItem(
+                    "cart",
+                    JSON.stringify(cart)
+                );
+
+                updateCartCount();
+
+                card.remove();
+
+                alert(
+                    "Product deleted successfully!"
+                );
+
+            } else {
+
+                alert(
+                    "Product delete failed!"
+                );
             }
 
-            const sellerProducts =
-                await response.json();
+        })
+        .catch(function(error) {
 
-            const productList =
-                document.getElementById("productList");
+            console.error(error);
 
-
-            // Get existing product names
-            const existingNames =
-                new Set(
-                    Array.from(
-                        document.querySelectorAll(".product h2")
-                    ).map(function(item) {
-                        return item.innerText.trim().toLowerCase();
-                    })
-                );
-
-
-            sellerProducts.forEach(function(product) {
-
-                // Don't duplicate existing 10 products
-                if (
-                    existingNames.has(
-                        product.name.trim().toLowerCase()
-                    )
-                ) {
-                    return;
-                }
-
-
-                const card =
-                    document.createElement("div");
-
-                card.className = "product";
-
-
-                const image =
-                    document.createElement("img");
-
-                image.src =
-                    "images/" + product.image;
-
-                image.alt = product.name;
-
-
-                const title =
-                    document.createElement("h2");
-
-                title.innerText =
-                    product.name;
-
-
-                const description =
-                    document.createElement("p");
-
-                description.innerText =
-                    product.description;
-
-
-                const price =
-                    document.createElement("div");
-
-                price.className = "price";
-
-                price.innerHTML =
-                    "&#8377;" +
-                    Number(product.price).toFixed(2);
-
-
-                const button =
-                    document.createElement("button");
-
-                button.className = "buy-btn";
-
-                button.innerText =
-                    "Add to Cart";
-
-
-                button.addEventListener(
-                    "click",
-                    function() {
-
-                        addToCart(
-                            product.name,
-                            Number(product.price),
-                            button
-                        );
-
-                    }
-                );
-
-
-                card.appendChild(image);
-                card.appendChild(title);
-                card.appendChild(description);
-                card.appendChild(price);
-                card.appendChild(button);
-
-
-                productList.appendChild(card);
-
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Seller products loading failed:",
-                error
+            alert(
+                "Product delete failed!"
             );
-        }
+        });
     }
 
 
-    updateCartCount();
+    // START
 
-    loadSellerProducts();
+    async function startPage() {
+
+        updateCartCount();
+
+        await loadUserRole();
+
+        await loadProducts();
+
+    }
+
+    startPage();
 
 </script>
 
