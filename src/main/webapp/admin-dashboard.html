@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Admin Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f2ff;
+        }
+
+        header {
+            background: #4b3f72;
+            color: white;
+            padding: 20px 35px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .welcome-box {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+            margin-bottom: 30px;
+        }
+
+        .welcome-box h2 {
+            margin-top: 0;
+            color: #4b3f72;
+            font-size: 28px;
+        }
+
+        .welcome-box p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 25px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            color: #4b3f72;
+            margin: 10px 0;
+            font-size: 21px;
+        }
+
+        .dashboard-card p {
+            color: #777;
+            min-height: 45px;
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 7px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .users-btn {
+            background: #6c5ce7;
+        }
+
+        .orders-btn {
+            background: #00a884;
+        }
+
+        .products-btn {
+            background: #1976d2;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>AyishaMart - Admin Dashboard</h1>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="welcome-box">
+
+        <h2>Welcome, Admin! 👋</h2>
+
+        <p>
+            Manage users, customer orders and products from one place.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+
+        <!-- MANAGE USERS -->
+
+        <div class="dashboard-card">
+
+            <div class="icon">
+                👥
+            </div>
+
+            <h3>
+                Manage Users
+            </h3>
+
+            <p>
+                View and manage registered users.
+            </p>
+
+            <a href="admin-users.html"
+               class="button users-btn">
+
+                View Users
+
+            </a>
+
+        </div>
+
+
+        <!-- MANAGE ORDERS -->
+
+        <div class="dashboard-card">
+
+            <div class="icon">
+                📦
+            </div>
+
+            <h3>
+                Manage Orders
+            </h3>
+
+            <p>
+                View and manage customer orders.
+            </p>
+
+            <a href="admin-orders.html"
+               class="button orders-btn">
+
+                View Orders
+
+            </a>
+
+        </div>
+
+
+        <!-- MANAGE PRODUCTS -->
+
+        <div class="dashboard-card">
+
+            <div class="icon">
+                🛍️
+            </div>
+
+            <h3>
+                Manage Products
+            </h3>
+
+            <p>
+                View and manage marketplace products.
+            </p>
+
+            <a href="products.html"
+               class="button products-btn">
+
+                View Products
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
