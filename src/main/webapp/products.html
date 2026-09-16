@@ -24,20 +24,40 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
         }
 
         header h1 {
             margin: 0;
         }
 
-        .cart-btn {
-            background: white;
-            color: #6a1b9a;
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cart-btn,
+        .orders-btn {
             border: none;
             padding: 10px 16px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .cart-btn {
+            background: white;
+            color: #6a1b9a;
+        }
+
+        .orders-btn {
+            background: #00a896;
+            color: white;
+        }
+
+        .orders-btn:hover {
+            background: #008f7f;
         }
 
         .search-box {
@@ -97,6 +117,7 @@
         }
 
         .buy-btn,
+        .review-btn,
         .edit-btn,
         .delete-btn {
             width: 100%;
@@ -115,6 +136,16 @@
 
         .buy-btn:hover {
             background: #4a126d;
+        }
+
+        /* RATE & REVIEW - ORANGE */
+
+        .review-btn {
+            background: #f57c00;
+        }
+
+        .review-btn:hover {
+            background: #e65100;
         }
 
         .edit-btn {
@@ -141,9 +172,27 @@
 
     <h1>AyishaMart</h1>
 
-    <button class="cart-btn" onclick="goToCart()">
-        🛒 Cart (<span id="cartCount">0</span>)
-    </button>
+    <div class="header-buttons">
+
+        <!-- BUYER ONLY -->
+        <button
+            id="myOrdersButton"
+            class="orders-btn"
+            onclick="goToMyOrders()"
+            style="display: none;"
+        >
+            📦 My Orders
+        </button>
+
+        <!-- EVERYONE -->
+        <button
+            class="cart-btn"
+            onclick="goToCart()"
+        >
+            🛒 Cart (<span id="cartCount">0</span>)
+        </button>
+
+    </div>
 
 </header>
 
@@ -196,6 +245,17 @@
             currentUserRole =
                 role.trim().toUpperCase();
 
+
+            // SHOW MY ORDERS ONLY FOR BUYER
+
+            if (currentUserRole === "BUYER") {
+
+                document.getElementById(
+                    "myOrdersButton"
+                ).style.display = "block";
+
+            }
+
         } catch (error) {
 
             console.error(
@@ -205,6 +265,25 @@
 
             currentUserRole = "NONE";
         }
+    }
+
+
+    // GO TO MY ORDERS
+
+    function goToMyOrders() {
+
+        window.location.href =
+            "buyer-orders.html";
+    }
+
+
+    // GO TO REVIEW PAGE
+
+    function goToReview(productId) {
+
+        window.location.href =
+            "review.html?id=" +
+            productId;
     }
 
 
@@ -387,6 +466,32 @@
                 card.appendChild(description);
                 card.appendChild(price);
                 card.appendChild(cartButton);
+
+
+                // RATE & REVIEW ONLY FOR BUYER
+
+                if (currentUserRole === "BUYER") {
+
+                    const reviewButton =
+                        document.createElement("button");
+
+                    reviewButton.className =
+                        "review-btn";
+
+                    reviewButton.innerText =
+                        "⭐ Rate & Review";
+
+                    reviewButton.addEventListener(
+                        "click",
+                        function() {
+
+                            goToReview(product.id);
+
+                        }
+                    );
+
+                    card.appendChild(reviewButton);
+                }
 
 
                 // EDIT + DELETE ONLY FOR SELLER / ADMIN

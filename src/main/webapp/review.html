@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AyishaMart - Rate & Review</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef8f7;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #00695c;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .back-btn {
+            background: white;
+            color: #00695c;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .review-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .review-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .review-card h2 {
+            color: #00695c;
+            margin-top: 0;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .rating-title {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .star {
+            font-size: 35px;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .star.selected {
+            color: #ffb300;
+        }
+
+        .review-label {
+            display: block;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            resize: vertical;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #00695c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #004d40;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .review-card {
+                padding: 20px;
+            }
+
+            .star {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>AyishaMart</h1>
+
+    <button
+        class="back-btn"
+        onclick="goBack()"
+    >
+        ← Products
+    </button>
+
+</header>
+
+
+<div class="review-container">
+
+    <div class="review-card">
+
+        <h2>Rate & Review</h2>
+
+        <div
+            id="productName"
+            class="product-name"
+        >
+            Loading product...
+        </div>
+
+
+        <div class="rating-title">
+            Your Rating
+        </div>
+
+        <div class="stars">
+
+            <span
+                class="star"
+                data-rating="1"
+                onclick="selectRating(1)"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-rating="2"
+                onclick="selectRating(2)"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-rating="3"
+                onclick="selectRating(3)"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-rating="4"
+                onclick="selectRating(4)"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-rating="5"
+                onclick="selectRating(5)"
+            >
+                ★
+            </span>
+
+        </div>
+
+
+        <label
+            class="review-label"
+            for="reviewText"
+        >
+            Your Review
+        </label>
+
+        <textarea
+            id="reviewText"
+            maxlength="1000"
+            placeholder="Write your review..."
+        ></textarea>
+
+
+        <button
+            id="submitButton"
+            class="submit-btn"
+            onclick="submitReview()"
+        >
+            Submit Review
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    let selectedRating = 0;
+
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const productId =
+        Number(
+            urlParams.get("id")
+        );
+
+
+    // LOAD PRODUCT NAME
+
+    async function loadProduct() {
+
+        if (!productId) {
+
+            document.getElementById(
+                "productName"
+            ).innerText =
+                "Invalid product.";
+
+            document.getElementById(
+                "submitButton"
+            ).disabled = true;
+
+            return;
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "seller-products?format=json"
+                );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Products could not be loaded"
+                );
+            }
+
+            const products =
+                await response.json();
+
+            const product =
+                products.find(function(item) {
+
+                    return Number(item.id) === productId;
+
+                });
+
+
+            if (!product) {
+
+                document.getElementById(
+                    "productName"
+                ).innerText =
+                    "Product not found.";
+
+                document.getElementById(
+                    "submitButton"
+                ).disabled = true;
+
+                return;
+            }
+
+
+            document.getElementById(
+                "productName"
+            ).innerText =
+                product.name;
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "productName"
+            ).innerText =
+                "Unable to load product.";
+        }
+    }
+
+
+    // SELECT RATING
+
+    function selectRating(rating) {
+
+        selectedRating = rating;
+
+        const stars =
+            document.querySelectorAll(".star");
+
+        stars.forEach(function(star) {
+
+            const starRating =
+                Number(
+                    star.getAttribute(
+                        "data-rating"
+                    )
+                );
+
+            if (starRating <= rating) {
+
+                star.classList.add(
+                    "selected"
+                );
+
+            } else {
+
+                star.classList.remove(
+                    "selected"
+                );
+            }
+        });
+    }
+
+
+    // SUBMIT REVIEW
+
+    async function submitReview() {
+
+        if (selectedRating === 0) {
+
+            alert(
+                "Please select a rating."
+            );
+
+            return;
+        }
+
+
+        const reviewText =
+            document.getElementById(
+                "reviewText"
+            ).value.trim();
+
+
+        if (reviewText === "") {
+
+            alert(
+                "Please write a review."
+            );
+
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "submitButton"
+            );
+
+        button.disabled = true;
+
+        button.innerText =
+            "Submitting...";
+
+
+        try {
+
+            const formData =
+                new URLSearchParams();
+
+            formData.append(
+                "productId",
+                productId
+            );
+
+            formData.append(
+                "rating",
+                selectedRating
+            );
+
+            formData.append(
+                "reviewText",
+                reviewText
+            );
+
+
+            const response =
+                await fetch(
+                    "submit-review",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+
+                        body:
+                            formData.toString()
+                    }
+                );
+
+
+            const result =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(result);
+            }
+
+
+            document.getElementById(
+                "message"
+            ).innerText =
+                "Review submitted successfully!";
+
+
+            document.getElementById(
+                "message"
+            ).style.color =
+                "#00695c";
+
+
+            document.getElementById(
+                "reviewText"
+            ).value = "";
+
+
+            selectRating(0);
+
+            button.disabled = false;
+
+            button.innerText =
+                "Submit Review";
+
+
+        } catch (error) {
+
+            console.error(
+                "Review submission error:",
+                error
+            );
+
+            document.getElementById(
+                "message"
+            ).innerText =
+                "Review submission failed.";
+
+            document.getElementById(
+                "message"
+            ).style.color =
+                "#d32f2f";
+
+            button.disabled = false;
+
+            button.innerText =
+                "Submit Review";
+        }
+    }
+
+
+    // BACK TO PRODUCTS
+
+    function goBack() {
+
+        window.location.href =
+            "products.html";
+    }
+
+
+    // START
+
+    loadProduct();
+
+</script>
+
+</body>
+</html>
