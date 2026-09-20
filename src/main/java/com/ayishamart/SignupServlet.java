@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.ayishamart.util.PasswordUtil;
+
 @WebServlet("/signup")
 public class SignupServlet extends HttpServlet {
 
@@ -17,29 +19,111 @@ public class SignupServlet extends HttpServlet {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
 
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String username =
+                request.getParameter("username");
 
-        try {
-            Connection con = DBConnection.getConnection();
+        String password =
+                request.getParameter("password");
 
-            PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(1, username);
-            ps.setString(2, password);
+        // Input validation
+
+        if (username == null ||
+            username.trim().isEmpty()) {
+
+            response.getWriter().println(
+                    "Username is required."
+            );
+
+            return;
+        }
+
+
+        if (password == null ||
+            password.isEmpty()) {
+
+            response.getWriter().println(
+                    "Password is required."
+            );
+
+            return;
+        }
+
+
+        username = username.trim();
+
+
+        // Username length validation
+
+        if (username.length() > 50) {
+
+            response.getWriter().println(
+                    "Username must be 50 characters or less."
+            );
+
+            return;
+        }
+
+
+        // Password length validation
+
+        if (password.length() > 255) {
+
+            response.getWriter().println(
+                    "Password is too long."
+            );
+
+            return;
+        }
+
+
+        // Hash password using BCrypt
+
+        String hashedPassword =
+                PasswordUtil.hashPassword(password);
+
+
+        String sql =
+                "INSERT INTO users (username, password) " +
+                "VALUES (?, ?)";
+
+
+        try (
+                Connection con =
+                        DBConnection.getConnection();
+
+                PreparedStatement ps =
+                        con.prepareStatement(sql)
+        ) {
+
+            ps.setString(
+                    1,
+                    username
+            );
+
+            ps.setString(
+                    2,
+                    hashedPassword
+            );
 
             ps.executeUpdate();
 
-            response.getWriter().println("Registration successful!");
 
-            ps.close();
-            con.close();
+            response.getWriter().println(
+                    "Registration successful!"
+            );
+
 
         } catch (Exception e) {
+
             e.printStackTrace();
-            response.getWriter().println("Registration failed!"+e.getMessage());
+
+            response.getWriter().println(
+                    "Registration failed!"
+            );
         }
     }
 }

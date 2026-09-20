@@ -471,6 +471,13 @@
 
             if (!response.ok) {
 
+                if (response.status === 409) {
+
+                    throw new Error(
+                        "You have already reviewed this product."
+                    );
+                }
+
                 throw new Error(result);
             }
 
@@ -510,6 +517,7 @@
             document.getElementById(
                 "message"
             ).innerText =
+                error.message ||
                 "Review submission failed.";
 
             document.getElementById(

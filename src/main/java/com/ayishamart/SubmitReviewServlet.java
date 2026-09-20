@@ -3,6 +3,7 @@ package com.ayishamart;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -47,6 +48,25 @@ public class SubmitReviewServlet extends HttpServlet {
                 (Integer) session.getAttribute("userId");
 
 
+        // CHECK BUYER ROLE
+
+        String role =
+                (String) session.getAttribute("role");
+
+        if (!"BUYER".equals(role)) {
+
+            response.setStatus(
+                    HttpServletResponse.SC_FORBIDDEN
+            );
+
+            response.getWriter().println(
+                    "Only buyers can submit reviews."
+            );
+
+            return;
+        }
+
+
         // GET FORM DATA
 
         String productIdText =
@@ -69,6 +89,38 @@ public class SubmitReviewServlet extends HttpServlet {
 
             response.getWriter().println(
                     "Missing review information."
+            );
+
+            return;
+        }
+
+
+        // SERVER-SIDE REVIEW VALIDATION
+
+        reviewText = reviewText.trim();
+
+        if (reviewText.isEmpty()) {
+
+            response.setStatus(
+                    HttpServletResponse.SC_BAD_REQUEST
+            );
+
+            response.getWriter().println(
+                    "Review cannot be empty."
+            );
+
+            return;
+        }
+
+
+        if (reviewText.length() > 1000) {
+
+            response.setStatus(
+                    HttpServletResponse.SC_BAD_REQUEST
+            );
+
+            response.getWriter().println(
+                    "Review must be 1000 characters or less."
             );
 
             return;
@@ -100,53 +152,117 @@ public class SubmitReviewServlet extends HttpServlet {
             }
 
 
-            // CHECK BUYER ROLE
+            // CHECK WHETHER BUYER PURCHASED
+            // THIS PRODUCT AND ORDER IS DELIVERED
 
-            String role =
-                    (String) session.getAttribute("role");
+            String purchaseSql =
+                    "SELECT o.id " +
+                    "FROM orders o " +
+                    "JOIN order_items oi " +
+                    "ON o.id = oi.order_id " +
+                    "WHERE o.user_id = ? " +
+                    "AND oi.product_id = ? " +
+                    "AND o.status = 'Delivered' " +
+                    "LIMIT 1";
 
-            if (!"BUYER".equals(role)) {
 
-                response.setStatus(
-                        HttpServletResponse.SC_FORBIDDEN
-                );
+            // CHECK DUPLICATE REVIEW
 
-                response.getWriter().println(
-                        "Only buyers can submit reviews."
-                );
-
-                return;
-            }
+            String duplicateReviewSql =
+                    "SELECT id " +
+                    "FROM product_reviews " +
+                    "WHERE user_id = ? " +
+                    "AND product_id = ? " +
+                    "LIMIT 1";
 
 
             // SAVE REVIEW
 
-            String sql =
+            String reviewSql =
                     "INSERT INTO product_reviews " +
                     "(product_id, user_id, rating, review_text) " +
                     "VALUES (?, ?, ?, ?)";
 
 
-            Connection con =
-                    DBConnection.getConnection();
+            try (
+                Connection con =
+                        DBConnection.getConnection();
 
-            PreparedStatement ps =
-                    con.prepareStatement(sql);
+                PreparedStatement purchasePs =
+                        con.prepareStatement(purchaseSql)
+            ) {
 
-            ps.setInt(1, productId);
+                purchasePs.setInt(1, userId);
+                purchasePs.setInt(2, productId);
 
-            ps.setInt(2, userId);
+                try (
+                    ResultSet rs =
+                            purchasePs.executeQuery()
+                ) {
 
-            ps.setInt(3, rating);
+                    if (!rs.next()) {
 
-            ps.setString(4, reviewText.trim());
+                        response.setStatus(
+                                HttpServletResponse.SC_FORBIDDEN
+                        );
+
+                        response.getWriter().println(
+                                "You can review only products from delivered orders."
+                        );
+
+                        return;
+                    }
+                }
 
 
-            ps.executeUpdate();
+                // CHECK IF REVIEW ALREADY EXISTS
+
+                try (
+                    PreparedStatement duplicatePs =
+                            con.prepareStatement(
+                                    duplicateReviewSql
+                            )
+                ) {
+
+                    duplicatePs.setInt(1, userId);
+                    duplicatePs.setInt(2, productId);
+
+                    try (
+                        ResultSet duplicateRs =
+                                duplicatePs.executeQuery()
+                    ) {
+
+                        if (duplicateRs.next()) {
+
+                            response.setStatus(
+                                    HttpServletResponse.SC_CONFLICT
+                            );
+
+                            response.getWriter().println(
+                                    "You have already reviewed this product."
+                            );
+
+                            return;
+                        }
+                    }
+                }
 
 
-            ps.close();
-            con.close();
+                // INSERT REVIEW
+
+                try (
+                    PreparedStatement reviewPs =
+                            con.prepareStatement(reviewSql)
+                ) {
+
+                    reviewPs.setInt(1, productId);
+                    reviewPs.setInt(2, userId);
+                    reviewPs.setInt(3, rating);
+                    reviewPs.setString(4, reviewText);
+
+                    reviewPs.executeUpdate();
+                }
+            }
 
 
             response.setStatus(
