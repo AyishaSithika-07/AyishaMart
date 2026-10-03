@@ -25,11 +25,14 @@ public class SignupServlet extends HttpServlet {
         String username =
                 request.getParameter("username");
 
+        String email =
+                request.getParameter("email");
+
         String password =
                 request.getParameter("password");
 
 
-        // Input validation
+        // Username validation
 
         if (username == null ||
             username.trim().isEmpty()) {
@@ -41,6 +44,21 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
+
+        // Email validation
+
+        if (email == null ||
+            email.trim().isEmpty()) {
+
+            response.getWriter().println(
+                    "Email is required."
+            );
+
+            return;
+        }
+
+
+        // Password validation
 
         if (password == null ||
             password.isEmpty()) {
@@ -54,6 +72,7 @@ public class SignupServlet extends HttpServlet {
 
 
         username = username.trim();
+        email = email.trim();
 
 
         // Username length validation
@@ -62,6 +81,31 @@ public class SignupServlet extends HttpServlet {
 
             response.getWriter().println(
                     "Username must be 50 characters or less."
+            );
+
+            return;
+        }
+
+
+        // Email length validation
+
+        if (email.length() > 100) {
+
+            response.getWriter().println(
+                    "Email must be 100 characters or less."
+            );
+
+            return;
+        }
+
+
+        // Simple email validation
+
+        if (!email.matches(
+                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+
+            response.getWriter().println(
+                    "Please enter a valid email address."
             );
 
             return;
@@ -87,8 +131,9 @@ public class SignupServlet extends HttpServlet {
 
 
         String sql =
-                "INSERT INTO users (username, password) " +
-                "VALUES (?, ?)";
+                "INSERT INTO users " +
+                "(username, email, password, role) " +
+                "VALUES (?, ?, ?, 'BUYER')";
 
 
         try (
@@ -106,6 +151,11 @@ public class SignupServlet extends HttpServlet {
 
             ps.setString(
                     2,
+                    email
+            );
+
+            ps.setString(
+                    3,
                     hashedPassword
             );
 
